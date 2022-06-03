@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caculator</title>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <link rel="stylesheet" href="./assets/icons/fontawesome-free-6.1.1-web/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="status-bar">
+            <div class="status-bar-time">
+                <span class="status-bar-time-text"></span>
+            </div>
+            <div class="status-bar-icon-container">
+                <ion-icon class="status-bar-icon" name="cellular"></ion-icon>
+                <ion-icon class="status-bar-icon" name="wifi"></ion-icon>
+                <ion-icon class="status-bar-icon" name="battery-full"></ion-icon>
+            </div>
+        </div>
+        <label class="theme-options" for="theme-checkbox">
+            <input class="theme-checkbox" type="checkbox" name="" id="theme-checkbox">
+            <span class="theme-btn">
+                <ion-icon class="theme-btn-icon theme-btn-icon-light" name="sunny-outline"></ion-icon>
+                <ion-icon class="theme-btn-icon theme-btn-icon-dark" name="moon-outline"></ion-icon>
+            </span>
+
+            </span>
+        </label>
+        <form class="caculator-form" action="#">
+            <div class="display">
+                <div class="screen">
+                    <input type="text" class="expression" value="" onclick="">
+                    <input class="result" type="text" value="">
+                </div>
+
+            </div>
+
+            <div class="button">
+                <div class="row row1">
+                    <button value="AC">AC</button>
+                    <button value="NOT">NOT</button>
+                    <button value=" % ">%</button>
+                    <button value=" / "><i class="fa-solid fa-divide"></i></button>
+                </div>
+                <div class="row">
+                    <button value="7">7</button>
+                    <button value="8">8</button>
+                    <button value="9">9</button>
+                    <button value=" * "><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="row">
+                    <button value="4">4</button>
+                    <button value="5">5</button>
+                    <button value="6">6</button>
+                    <button value=" + "><i class="fa-solid fa-plus"></i></button>
+                </div>
+                <div class="row">
+                    <button class="test" value="1">1</button>
+                    <button value="2">2</button>
+                    <button value="3">3</button>
+                    <button value=" - "><i class="fa-solid fa-minus"></i></button>
+                </div>
+                <div class="row">
+                    <button value="BACK"><i class="fa-solid fa-arrow-rotate-right"></i></button>
+                    <button value="0">0</button>
+                    <button value=".">.</button>
+                    <button value="EQUAL"><i class="fa-solid fa-equals"></i></button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const $ = document.querySelector.bind(document)
+        const $$ = document.querySelectorAll.bind(document)
+        const btn = $$('.row button')
+        const expressionDisplay = $('.expression')
+        const resultDisplay = $('.result')
+        const themebtn = $('.theme-options')
+        const themeCheckbox = $('.theme-checkbox')
+        const container = $('.container')
+        const time = $('.status-bar-time-text')
+
+        setTimeout(function setTime() {
+            const date = new Date();
+            const nowTime = date.toLocaleString().substring(0, 5);
+            time.innerText = nowTime;
+            setTimeout(setTime, 1000);
+        }, 1000)
+
+
+        themebtn.onclick = (e) => {
+            if (themeCheckbox.checked) {
+                container.classList.add('light')
+            }
+            else {
+                container.classList.remove('light')
+
+            }
+        }
+
+        let expression = [];
+        isCalculator = false;
+        isNextNumber = true;
+        let result;
+        btn.forEach(item => {
+            item.onmousedown = () => {
+                item.classList.add('active');
+                switch (item.value) {
+                    case 'AC':
+                        expression = [];
+                        result = null;
+                        resultDisplay.value = '';
+                        break;
+                    case 'NOT':
+                        result = -result;
+                        resultDisplay.value = result;
+                        expression = [];
+                        expressionDisplay.value = '';
+                        break;
+                    case 'BACK':
+                        expression.pop();
+                        isCalculator = false;
+                        break;
+                    case 'EQUAL':
+                        result = eval(expression.join(''))
+                        resultDisplay.value = result;
+                        isCalculator = true;
+                        isNextNumber = false;
+                        break;
+                    default:
+                        if (isCalculator) {
+                            isCalculator = false;
+                            if (!isNextNumber && !isNaN(+item.value)) {
+                                expression = [];
+                                isNextNumber = true;
+                                console.log(231)
+                            }
+                            else {
+                                expression = [result]
+                                console.log(456)
+                            }
+                        }
+
+                        expression.push(item.value);
+                }
+                if (item.value != 'EQUAL') {
+                    expressionDisplay.value = expression.join('')
+                }
+            }
+            item.onmouseup = () => {
+                item.classList.remove('active')
+            }
+        })
+
+
+
+    </script>
+
+
+</body>
+
+</html>
